@@ -288,7 +288,7 @@ MonoBehaviour:
     m_Value: 0
   m_RayMaxIterations:
     m_OverrideState: 1
-    m_Value: 16
+    m_Value: 32
   rayMiss:
     m_OverrideState: 1
     m_Value: 3
@@ -794,7 +794,7 @@ MonoBehaviour:
     m_Value: 64
   m_VolumetricFogBudget:
     m_OverrideState: 1
-    m_Value: 0.25
+    m_Value: 0.5
   m_ResolutionDepthRatio:
     m_OverrideState: 1
     m_Value: 0.5
@@ -1023,7 +1023,7 @@ MonoBehaviour:
       m_Value: 1
     opacityG:
       m_OverrideState: 1
-      m_Value: 0.361
+      m_Value: 0
     opacityB:
       m_OverrideState: 1
       m_Value: 0
@@ -1188,7 +1188,7 @@ MonoBehaviour:
     m_Value: 0.15
   m_SampleCount:
     m_OverrideState: 1
-    m_Value: 6
+    m_Value: 10
 --- !u!114 &-656753348041954918
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -1461,10 +1461,10 @@ MonoBehaviour:
     m_Value: 1
   upperHemisphereLuxValue:
     m_OverrideState: 1
-    m_Value: 0.41150787
+    m_Value: 0.4660715
   upperHemisphereLuxColor:
     m_OverrideState: 1
-    m_Value: {x: 0.29838714, y: 0.4083768, z: 0.5}
+    m_Value: {x: 0.18750614, y: 0.29181972, z: 0.5}
   desiredLuxValue:
     m_OverrideState: 1
     m_Value: 20000
@@ -1479,7 +1479,7 @@ MonoBehaviour:
     m_Value: 0
   hdriSky:
     m_OverrideState: 1
-    m_Value: {fileID: 8900000, guid: a615f6de0224d55408b4e74da3b0bac0, type: 3}
+    m_Value: {fileID: 8900000, guid: 8253d41e6e8b11a4cbe77a4f8f82934d, type: 3}
   distortionMode:
     m_OverrideState: 1
     m_Value: 0
@@ -1745,7 +1745,7 @@ MonoBehaviour:
   active: 1
   skyType:
     m_OverrideState: 1
-    m_Value: 3
+    m_Value: 1
   cloudType:
     m_OverrideState: 1
     m_Value: 0
@@ -1934,7 +1934,7 @@ MonoBehaviour:
     m_Value: 0
   top:
     m_OverrideState: 1
-    m_Value: {r: 0.025453899, g: 0.025453899, b: 0.49056602, a: 1}
+    m_Value: {r: 0, g: 0, b: 1, a: 1}
   middle:
     m_OverrideState: 1
     m_Value: {r: 0.3, g: 0.7, b: 1, a: 1}
@@ -2149,8 +2149,7 @@ MonoBehaviour:
     m_Value: 0
   material:
     m_OverrideState: 1
-    m_Value: {fileID: -876546973899608171, guid: 02532cbb810fb404db49da84f1efe41e,
-      type: 3}
+    m_Value: {fileID: -876546973899608171, guid: 02532cbb810fb404db49da84f1efe41e, type: 3}
   airDensityR:
     m_OverrideState: 1
     m_Value: 0.04534
@@ -2278,19 +2277,19 @@ MonoBehaviour:
     m_Value: 20
   m_NearSampleCount:
     m_OverrideState: 1
-    m_Value: 4
+    m_Value: 5
   m_NearMaxBlur:
     m_OverrideState: 1
-    m_Value: 3
+    m_Value: 4
   m_FarSampleCount:
     m_OverrideState: 1
-    m_Value: 5
+    m_Value: 7
   m_FarMaxBlur:
     m_OverrideState: 1
-    m_Value: 6
+    m_Value: 8
   m_Resolution:
     m_OverrideState: 1
-    m_Value: 4
+    m_Value: 2
   m_HighQualityFiltering:
     m_OverrideState: 1
     m_Value: 1
@@ -2446,19 +2445,19 @@ MonoBehaviour:
     m_Value: 1
   m_StepCount:
     m_OverrideState: 1
-    m_Value: 4
+    m_Value: 6
   m_FullResolution:
     m_OverrideState: 1
     m_Value: 0
   m_MaximumRadiusInPixels:
     m_OverrideState: 1
-    m_Value: 32
+    m_Value: 40
   m_BilateralUpsample:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 1
   m_DirectionCount:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 2
   m_RayLength:
     m_OverrideState: 1
     m_Value: 3
