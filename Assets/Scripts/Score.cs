@@ -19,36 +19,41 @@ public class Score : MonoBehaviour
 
     private void OnEnable()
     {
-        _inputReader.OnMouseClick += ToggleCounter;
+        _inputReader.ClickPerformed += ToggleCounter;
     }
 
     private void OnDisable()
     {
-        _inputReader.OnMouseClick -= ToggleCounter;
+        _inputReader.ClickPerformed -= ToggleCounter;
     }
 
     private IEnumerator ScoreIncrease(float delay, int amount)
     {
-        while (true)
+        var wait = new WaitForSeconds(delay);
+
+        while (enabled)
         {
-            yield return new WaitForSeconds(delay);
+            yield return wait;
 
             _score += amount;
             OnScoreChanged?.Invoke(_score);
-        }     
+        }
     }
 
     public void ToggleCounter()
     {
         if (_isRunning)
         {
-            StopCoroutine(_coroutine);
-            _isRunning = false;
+            if (_coroutine != null)
+            {
+                StopCoroutine(_coroutine);
+            }
         }
         else
         {
             StartCoroutine(_coroutine);
-            _isRunning = true;
         }
+
+        _isRunning = !_isRunning;
     }
 }
