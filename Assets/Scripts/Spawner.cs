@@ -11,10 +11,10 @@ public class Spawner : MonoBehaviour
 
     private void Start()
     {
-        CreateCube(Vector3.up);
+        CreateCube(Vector3.up, Vector3.one);
     }
 
-    public List<Rigidbody> FillCubes(Vector3 position, int chance)
+    public List<Rigidbody> FillCubes(Vector3 position, int chance, Vector3 scale)
     {
         List<Rigidbody> createdCubes= new List<Rigidbody>();
 
@@ -22,7 +22,7 @@ public class Spawner : MonoBehaviour
 
         for(int i = 0; i < GetCubeCount(); ++i)
         {
-            createdCubes.Add(CreateCube(position).GetComponent<Rigidbody>());
+            createdCubes.Add(CreateCube(position, scale/2).GetComponent<Rigidbody>());
         }        
 
         return createdCubes;
@@ -33,10 +33,11 @@ public class Spawner : MonoBehaviour
         return UnityEngine.Random.Range(_minCubeCount, _maxCubeCount + 1);
     }
 
-    private Cube CreateCube(Vector3 position)
+    private Cube CreateCube(Vector3 position, Vector3 scale)
     {
         Cube cube = Instantiate(_cubePrafab, position, Quaternion.identity);
         cube.Init(this, _currentChance);
+        cube.transform.localScale = scale;
 
         return cube;   
     }

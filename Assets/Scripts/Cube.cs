@@ -34,7 +34,7 @@ public class Cube : MonoBehaviour
     {
         if (TrySplitCube())
         {
-            _createdCubes = _spawner.FillCubes(transform.position, _splitChance);
+            _createdCubes = _spawner.FillCubes(transform.position, _splitChance, transform.localScale);
             Explode();
         }
 
