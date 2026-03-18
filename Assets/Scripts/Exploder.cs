@@ -1,22 +1,20 @@
-using System;
 using UnityEngine;
 using System.Collections.Generic;
 
 public class Exploder : MonoBehaviour
 {
-    [SerializeField] private Spawner _spawner;
     [SerializeField] private float _explotionForce;
     [SerializeField] private float _explotionRadius;
 
-    private void OnEnable() => _spawner.SpawnedCubes += Explode;
-
-    private void OnDisable() => _spawner.SpawnedCubes -= Explode;
-
-    private void Explode(List<Rigidbody> cubes)
+    private float _offsetMultiplie = 0.5f;
+    public void Explode(IEnumerable<Cube> cubes)
     {
-        foreach (Rigidbody explodableObjcets in cubes)
+        foreach (Cube explodableObjcets in cubes)
         {
-            explodableObjcets.AddExplosionForce(_explotionForce, transform.position, _explotionRadius);
+            Vector3 randomOffset = Random.insideUnitSphere * _offsetMultiplie;
+            Vector3 explosionPosition = transform.position + randomOffset;
+
+            explodableObjcets.Rigidbody.AddExplosionForce(_explotionForce, explosionPosition, _explotionRadius);
         }
     }
 }

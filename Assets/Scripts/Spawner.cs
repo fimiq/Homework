@@ -1,13 +1,13 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Spawner : MonoBehaviour
 {
-    public event Action<List<Rigidbody>> SpawnedCubes;
     [SerializeField] private Cube _cubePrafab;
-    [SerializeField] private CubeClickHandler _clickHandler;
+
     private int _currentChance = 100;
+    private int _chanceReduction = 2;
+    private int _scaleReduction = 2;
     private int _maxCubeCount = 6;
     private int _minCubeCount = 2;
 
@@ -16,24 +16,26 @@ public class Spawner : MonoBehaviour
         CreateCube(Vector3.up, Vector3.one);
     }
 
-    private void OnEnable() => _clickHandler.CubeSplit += FillCubes;
-
-    private void OnDisable() => _clickHandler.CubeSplit -= FillCubes;
-
-    public void FillCubes(Cube cube)
+    public List<Cube> SplitCubes(Cube cube)
     {
-        List<Rigidbody> createdCubes= new List<Rigidbody>();
+        List<Cube> createdCubes= new List<Cube>();
 
-        _currentChance = cube.SplitChance/2;
+        _currentChance = cube.SplitChance/_chanceReduction;
 
-        for(int i = 0; i < GetCubeCount(); ++i)
+        int cubesCount = GetCubeCount();
+
+        for(int i = 0; i < cubesCount; ++i)
         {
-            createdCubes.Add(CreateCube(cube.transform.position, cube.transform.localScale/2).GetComponent<Rigidbody>());
+            Cube newCube = CreateCube(cube.transform.position, cube.transform.localScale / _scaleReduction);
+            createdCubes.Add(newCube);
         }
 
-        Destroy(cube.gameObject);
+        return createdCubes;
+    }
 
-        SpawnedCubes?.Invoke(createdCubes);
+    public void DestroyCube(Cube cube)
+    {
+        Destroy(cube.gameObject);   
     }
 
     private int GetCubeCount()
@@ -45,7 +47,12 @@ public class Spawner : MonoBehaviour
     {
         Cube cube = Instantiate(_cubePrafab, position, Quaternion.identity);
         cube.Init(_currentChance);
-        ChangeColor(cube.GetComponent<Renderer>().material);
+
+        if(cube.TryGetComponent<Renderer>(out Renderer renderer))
+        {
+            ChangeColor(renderer.material);
+        }
+        
         cube.transform.localScale = scale;
 
         return cube;   
