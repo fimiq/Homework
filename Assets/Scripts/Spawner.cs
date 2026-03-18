@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class Spawner : MonoBehaviour
 {
+    public event Action<List<Rigidbody>> SpawnedCubes;
     [SerializeField] private Cube _cubePrafab;
+    [SerializeField] private CubeClickHandler _clickHandler;
     private int _currentChance = 100;
     private int _maxCubeCount = 6;
     private int _minCubeCount = 2;
@@ -14,18 +16,24 @@ public class Spawner : MonoBehaviour
         CreateCube(Vector3.up, Vector3.one);
     }
 
-    public List<Rigidbody> FillCubes(Vector3 position, int chance, Vector3 scale)
+    private void OnEnable() => _clickHandler.CubeSplit += FillCubes;
+
+    private void OnDisable() => _clickHandler.CubeSplit -= FillCubes;
+
+    public void FillCubes(Cube cube)
     {
         List<Rigidbody> createdCubes= new List<Rigidbody>();
 
-        _currentChance = chance/2;
+        _currentChance = cube.SplitChance/2;
 
         for(int i = 0; i < GetCubeCount(); ++i)
         {
-            createdCubes.Add(CreateCube(position, scale/2).GetComponent<Rigidbody>());
-        }        
+            createdCubes.Add(CreateCube(cube.transform.position, cube.transform.localScale/2).GetComponent<Rigidbody>());
+        }
 
-        return createdCubes;
+        Destroy(cube.gameObject);
+
+        SpawnedCubes?.Invoke(createdCubes);
     }
 
     private int GetCubeCount()
@@ -36,10 +44,15 @@ public class Spawner : MonoBehaviour
     private Cube CreateCube(Vector3 position, Vector3 scale)
     {
         Cube cube = Instantiate(_cubePrafab, position, Quaternion.identity);
-        cube.Init(this, _currentChance);
+        cube.Init(_currentChance);
+        ChangeColor(cube.GetComponent<Renderer>().material);
         cube.transform.localScale = scale;
 
         return cube;   
     }
-    
+
+    private void ChangeColor(Material material)
+    {
+        material.color = UnityEngine.Random.ColorHSV();
+    }
 }
