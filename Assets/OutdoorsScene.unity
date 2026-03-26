@@ -915,8 +915,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70b801c68c93c394eba2b8d4d86b86c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Explotioner
+  _explotionParticle: {fileID: 198000012777718758, guid: acf39d9f4addf294d93fa56fa373961b,
+    type: 3}
   _explotionForce: 200
-  _explotionRadius: 100
+  _explotionRadius: 2
 --- !u!1 &1415374433
 GameObject:
   m_ObjectHideFlags: 0

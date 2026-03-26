@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class CubeSplitter : MonoBehaviour
@@ -22,11 +23,15 @@ public class CubeSplitter : MonoBehaviour
         {
             if (cube.SplitChance >= randomNumber)
             {
-                IEnumerable<Cube> cubes = _spawner.SplitCubes(cube);
+                List<IExplodable> cubes = _spawner.SplitCubes(cube);
                 _exploder.Explode(cubes);
             }
+            else
+            {
+                _exploder.Explode(cube);
+            }
 
-            _spawner.DestroyCube(cube);
+             _spawner.DestroyCube(cube);
         }
     }
 }

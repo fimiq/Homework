@@ -16,9 +16,9 @@ public class Spawner : MonoBehaviour
         CreateCube(Vector3.up, Vector3.one);
     }
 
-    public List<Cube> SplitCubes(Cube cube)
+    public List<IExplodable> SplitCubes(Cube cube)
     {
-        List<Cube> createdCubes= new List<Cube>();
+        List<IExplodable> createdCubes= new List<IExplodable>();
 
         _currentChance = cube.SplitChance/_chanceReduction;
 
