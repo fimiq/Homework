@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -26,9 +27,18 @@ public class Spawner : MonoBehaviour
         maxSize: _poolMaxSize);
     }
 
-    private void Start()
+    private void Start() =>
+        StartCoroutine(SpawnObjects());
+
+    private IEnumerator SpawnObjects()
     {
-        InvokeRepeating(nameof(GetCube), 0f, _delay);
+        var wait = new WaitForSeconds(_delay);
+
+        while (enabled)
+        {
+            yield return wait;
+            GetCube();
+        }
     }
 
     private void GetCube()

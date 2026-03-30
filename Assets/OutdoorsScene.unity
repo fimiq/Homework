@@ -454,9 +454,10 @@ GameObject:
   - component: {fileID: 472314038}
   - component: {fileID: 472314037}
   - component: {fileID: 472314036}
+  - component: {fileID: 472314040}
   m_Layer: 0
   m_Name: PlatformDown
-  m_TagString: Platform
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -554,6 +555,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 119595511}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &472314040
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 472314035}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65e5995844ddf284097e5fbd68014e5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Platform
 --- !u!1 &634894307
 GameObject:
   m_ObjectHideFlags: 0
@@ -616,9 +629,10 @@ GameObject:
   - component: {fileID: 681989771}
   - component: {fileID: 681989770}
   - component: {fileID: 681989769}
+  - component: {fileID: 681989773}
   m_Layer: 0
   m_Name: Platform Right
-  m_TagString: Platform
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -716,6 +730,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 119595511}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 20}
+--- !u!114 &681989773
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 681989768}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65e5995844ddf284097e5fbd68014e5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Platform
 --- !u!1 &1589384040
 GameObject:
   m_ObjectHideFlags: 0
@@ -1125,9 +1151,10 @@ GameObject:
   - component: {fileID: 1860471545}
   - component: {fileID: 1860471544}
   - component: {fileID: 1860471543}
+  - component: {fileID: 1860471547}
   m_Layer: 0
   m_Name: PlatformLeft
-  m_TagString: Platform
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1225,6 +1252,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 119595511}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -20}
+--- !u!114 &1860471547
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1860471542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65e5995844ddf284097e5fbd68014e5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Platform
 --- !u!1 &2013410473
 GameObject:
   m_ObjectHideFlags: 1

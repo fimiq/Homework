@@ -1,19 +1,36 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(ColorChanger))]
 
 public class Cube : MonoBehaviour
 {
     public event Action<Cube> OnReleased;
 
+    private ColorChanger _colorChanger;
+    private Renderer _renderer;
+
     private int _lowLimitTimer = 2;
     private int _highLimitTimer = 5;
 
-    public void Release()
+    private bool _releaseStarted = false;
+
+    private void Awake()
     {
-        OnReleased?.Invoke(this);
+        _colorChanger = GetComponent<ColorChanger>();
+        _renderer = GetComponent<Renderer>();
     }
+
+    private void OnEnable()
+    {
+        _releaseStarted = false;
+        _colorChanger.SetStartColor(_renderer);
+    }
+
+    public void Release() =>
+        OnReleased?.Invoke(this);
 
     public void ResetState()
     {
@@ -27,16 +44,27 @@ public class Cube : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.collider.tag == "Platform")
+        if (_releaseStarted)
+            return;
+
+        if (collision.collider.TryGetComponent(out Platform platform))
         {
-            Invoke(nameof(Release), GetRandomTime());
+            _releaseStarted = true;
+
+            _colorChanger.SetRandomColor(_renderer);
+            StartCoroutine(ReleaseCube());
         }
+    }
+
+    private IEnumerator ReleaseCube()
+    {
+        yield return new WaitForSeconds(GetRandomTime());
+        Release();
     }
 
     private int GetRandomTime() =>
         UnityEngine.Random.Range(_lowLimitTimer, _highLimitTimer + 1);
 
     private void OnDisable() =>
-        CancelInvoke();
-
+        StopAllCoroutines();
 }
