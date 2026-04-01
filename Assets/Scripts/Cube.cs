@@ -4,10 +4,12 @@ using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(ColorChanger))]
+[RequireComponent(typeof(Renderer))]
 public class Cube : MonoBehaviour
 {
     private ColorChanger _colorChanger;
     private Renderer _renderer;
+    private Rigidbody _rigidbody;
 
     private int _lowLimitTimer = 2;
     private int _highLimitTimer = 5;
@@ -16,18 +18,19 @@ public class Cube : MonoBehaviour
 
     private  Coroutine _coroutine;
 
-    public event Action<Cube> CubeReleasing;
+    public event Action<Cube> Released;
 
     private void Awake()
     {
         _colorChanger = GetComponent<ColorChanger>();
         _renderer = GetComponent<Renderer>();
+        _rigidbody = GetComponent<Rigidbody>();
     }
 
     private void OnEnable()
     {
         _releaseStarted = false;
-        _colorChanger.SetStartColor(_renderer);
+        _colorChanger.SetStartColor();
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -39,22 +42,19 @@ public class Cube : MonoBehaviour
         {
             _releaseStarted = true;
 
-            _colorChanger.SetRandomColor(_renderer);
+            _colorChanger.SetRandomColor();
             _coroutine = StartCoroutine(ReleaseCube());
         }
     }
 
     public void Release() =>
-        CubeReleasing?.Invoke(this);
+        Released?.Invoke(this);
 
     public void ResetState()
     {
-        if (TryGetComponent(out Rigidbody rigidbody))
-        {
-            rigidbody.linearVelocity = Vector3.zero;
-            rigidbody.angularVelocity = Vector3.zero;
-            rigidbody.rotation = Quaternion.identity;
-        }
+        _rigidbody.linearVelocity = Vector3.zero;
+        _rigidbody.angularVelocity = Vector3.zero;
+        _rigidbody.rotation = Quaternion.identity;
     }
      
     private IEnumerator ReleaseCube()

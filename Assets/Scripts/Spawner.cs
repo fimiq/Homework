@@ -62,12 +62,12 @@ public class Spawner : MonoBehaviour
         cube.transform.position = GenerateRandomPosition();
         cube.gameObject.SetActive(true);
 
-        cube.CubeReleasing += ReleaseCube;
+        cube.Released += ReleaseCube;
     }
 
     private void OnReleaseToPool(Cube cube)
     {
-        cube.CubeReleasing -= ReleaseCube;
+        cube.Released -= ReleaseCube;
         cube.gameObject.SetActive(false);
     }
 
