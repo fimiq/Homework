@@ -18,13 +18,13 @@ public class Spawner : MonoBehaviour
     private void Awake()
     {
         _cubePool = new ObjectPool<Cube>(
-        createFunc: () => Instantiate(_cubePrefab),
-        actionOnGet: ActionOnGet,
-        actionOnRelease: OnReleaseToPool,
-        actionOnDestroy: (cube) => Destroy(cube),
-        collectionCheck: true,
-        defaultCapacity: _poolCapacity,
-        maxSize: _poolMaxSize);
+            createFunc: () => Instantiate(_cubePrefab),
+            actionOnGet: GetAction,
+            actionOnRelease: OnReleaseToPool,
+            actionOnDestroy: (cube) => Destroy(cube),
+            collectionCheck: true,
+            defaultCapacity: _poolCapacity,
+            maxSize: _poolMaxSize);
     }
 
     private void Start() =>
@@ -57,17 +57,17 @@ public class Spawner : MonoBehaviour
         _activeCount--;
     }
 
-    private void ActionOnGet(Cube cube)
+    private void GetAction(Cube cube)
     {
         cube.transform.position = GenerateRandomPosition();
         cube.gameObject.SetActive(true);
 
-        cube.OnReleased += ReleaseCube;
+        cube.CubeReleasing += ReleaseCube;
     }
 
     private void OnReleaseToPool(Cube cube)
     {
-        cube.OnReleased -= ReleaseCube;
+        cube.CubeReleasing -= ReleaseCube;
         cube.gameObject.SetActive(false);
     }
 

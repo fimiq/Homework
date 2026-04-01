@@ -4,11 +4,8 @@ using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(ColorChanger))]
-
 public class Cube : MonoBehaviour
 {
-    public event Action<Cube> OnReleased;
-
     private ColorChanger _colorChanger;
     private Renderer _renderer;
 
@@ -16,6 +13,10 @@ public class Cube : MonoBehaviour
     private int _highLimitTimer = 5;
 
     private bool _releaseStarted = false;
+
+    private  Coroutine _coroutine;
+
+    public event Action<Cube> CubeReleasing;
 
     private void Awake()
     {
@@ -29,19 +30,6 @@ public class Cube : MonoBehaviour
         _colorChanger.SetStartColor(_renderer);
     }
 
-    public void Release() =>
-        OnReleased?.Invoke(this);
-
-    public void ResetState()
-    {
-        if (TryGetComponent(out Rigidbody rigidbody))
-        {
-            rigidbody.linearVelocity = Vector3.zero;
-            rigidbody.angularVelocity = Vector3.zero;
-            rigidbody.rotation = Quaternion.identity;
-        }
-    }
-
     private void OnCollisionEnter(Collision collision)
     {
         if (_releaseStarted)
@@ -52,10 +40,23 @@ public class Cube : MonoBehaviour
             _releaseStarted = true;
 
             _colorChanger.SetRandomColor(_renderer);
-            StartCoroutine(ReleaseCube());
+            _coroutine = StartCoroutine(ReleaseCube());
         }
     }
 
+    public void Release() =>
+        CubeReleasing?.Invoke(this);
+
+    public void ResetState()
+    {
+        if (TryGetComponent(out Rigidbody rigidbody))
+        {
+            rigidbody.linearVelocity = Vector3.zero;
+            rigidbody.angularVelocity = Vector3.zero;
+            rigidbody.rotation = Quaternion.identity;
+        }
+    }
+     
     private IEnumerator ReleaseCube()
     {
         yield return new WaitForSeconds(GetRandomTime());
@@ -66,5 +67,5 @@ public class Cube : MonoBehaviour
         UnityEngine.Random.Range(_lowLimitTimer, _highLimitTimer + 1);
 
     private void OnDisable() =>
-        StopAllCoroutines();
+        StopCoroutine(_coroutine);
 }
