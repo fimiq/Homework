@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Spawner : MonoBehaviour
@@ -6,13 +7,37 @@ public class Spawner : MonoBehaviour
     [SerializeField] private GameObject _enemyPrefab;
     [SerializeField] private float _delay;
 
-    private Transform SelectRandomPoint()
+    private Coroutine _coroutine;
+
+    private void Start()
     {
-        return _points[Random.Range(0, _points.Length+1)];
+        _coroutine = StartCoroutine(Spawn());
+    }
+
+    private IEnumerator Spawn()
+    {
+        var wait = new WaitForSeconds(_delay);
+
+        while (enabled)
+        {
+            yield return wait;
+
+            GameObject enemyObject = Instantiate(_enemyPrefab, SelectRandomPoint(), Quaternion.identity);
+
+            if (enemyObject.TryGetComponent(out Enemy enemy))
+            {
+                enemy.Initialize(GenerateRandomVelocity());
+            }
+        }   
+    }
+
+    private Vector3 SelectRandomPoint()
+    {
+        return _points[Random.Range(0, _points.Length)].position;
     }
 
     private Vector3 GenerateRandomVelocity()
     {
-        return
+        return new Vector3(Random.Range(-1f,1f), 0, Random.Range(-1f,1f)).normalized;
     }
 }
