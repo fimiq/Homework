@@ -3,22 +3,17 @@ using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public class Enemy : MonoBehaviour
+public abstract class Enemy : MonoBehaviour
 {
-    [SerializeField] private float _speed = 1;
-    [SerializeField] private float _lifeTime = 5;
-
     public event Action<Enemy> Release;
 
-    private Coroutine _coroutine;
-    private Vector3 _direction;
-    private Rigidbody _rigidbody;
+    protected Rigidbody _rigidbody;
+    protected Coroutine _coroutine;
+    protected Target _target;
+    protected float _lifeTime;
 
     public void Awake() =>
         _rigidbody = GetComponent<Rigidbody>();
-
-    private void OnEnable() =>
-        _coroutine = StartCoroutine(DisableByTime());
 
     private void OnDisable()
     {
@@ -28,22 +23,21 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    private void FixedUpdate()
+    public virtual void Initialize(Target target, float lifeTime)
     {
-        _rigidbody.linearVelocity = _direction * _speed;
+        _target = target;
+        _lifeTime = lifeTime;
+        _coroutine = StartCoroutine(DisableByTime());
     }
-
-    public void Initialize(Vector3 direction) =>
-        _direction = direction;
 
     public void ResetState()
     {
         _rigidbody.linearVelocity = Vector3.zero;
-        _rigidbody.angularVelocity = Vector3.zero;
+        _rigidbody.angularVelocity = Vector3.zero; 
         _rigidbody.rotation = Quaternion.identity;
     }
 
-    private IEnumerator DisableByTime()
+    protected IEnumerator DisableByTime()
     {
         yield return new WaitForSeconds(_lifeTime);
 

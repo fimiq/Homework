@@ -4,9 +4,11 @@ using UnityEngine.Pool;
 
 public class Spawner : MonoBehaviour
 {
-    [SerializeField] private Transform[] _points;
+    [SerializeField] private Transform _spawnPoint;
+    [SerializeField] private Target _target;
     [SerializeField] private Enemy _enemyPrefab;
     [SerializeField] private float _delay;
+    [SerializeField] private float _lifeTime;
 
     private Coroutine _coroutine;
     private ObjectPool<Enemy> _pool;
@@ -18,7 +20,7 @@ public class Spawner : MonoBehaviour
     {
         _pool = new ObjectPool<Enemy>(
             createFunc: () => Instantiate(_enemyPrefab),
-            actionOnGet: GetAction,
+            actionOnGet: OnGet,
             actionOnRelease: OnReleaseToPool,
             actionOnDestroy: (cube) => Destroy(cube),
             collectionCheck: true,
@@ -57,14 +59,15 @@ public class Spawner : MonoBehaviour
         _activeCount--;
     }
 
-    private void GetAction(Enemy enemy)
+    private void OnGet(Enemy enemy)
     {
-        enemy.transform.position = SelectRandomPoint();
-        enemy.Initialize(GenerateRandomDirection());
+        enemy.transform.position = _spawnPoint.position;
+        enemy.gameObject.SetActive(true);
+
+        enemy.Initialize(_target, _lifeTime);
 
         enemy.Release += ReleaseEnemy;
 
-        enemy.gameObject.SetActive(true);
     }
 
     private void OnReleaseToPool(Enemy enemy)
@@ -72,10 +75,4 @@ public class Spawner : MonoBehaviour
         enemy.Release -= ReleaseEnemy;
         enemy.gameObject.SetActive(false);
     }
-
-    private Vector3 SelectRandomPoint() =>
-        _points[Random.Range(0, _points.Length)].position;
-
-    private Vector3 GenerateRandomDirection() =>
-        new Vector3(Random.Range(-1f,1f), 0, Random.Range(-1f,1f)).normalized;
 }
