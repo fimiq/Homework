@@ -13,7 +13,7 @@ public class PointMover : MonoBehaviour
         _places = new Transform[_parentPlace.childCount];
 
         for (int i = 0; i < _parentPlace.childCount; i++)
-            _places[i] = _parentPlace.GetChild(i).GetComponent<Transform>();
+            _places[i] = _parentPlace.GetChild(i);
     }
 
     private void Update()
@@ -24,19 +24,15 @@ public class PointMover : MonoBehaviour
 
         if (transform.position == place.position)
         {
-            GetNextPlace();
+            MoveToNextPoint();
         }
     }
 
-    private Vector3 GetNextPlace()
+    private void MoveToNextPoint()
     {
         _currnetPlace++;
 
         if (_currnetPlace == _places.Length)
             _currnetPlace = 0;
-
-        Vector3 nextPlace = _places[_currnetPlace].transform.position;
-
-        return nextPlace;
     }
 }
