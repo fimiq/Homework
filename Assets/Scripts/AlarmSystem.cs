@@ -1,41 +1,74 @@
 using UnityEngine;
+using System.Collections;
 
-[RequireComponent (typeof(AudioSource))]
+[RequireComponent(typeof(AudioSource))]
 public class AlarmSystem : MonoBehaviour
 {
     [SerializeField] private AudioSource _audioSource;
+    [SerializeField] private AlarmTrigger _alarmTrigger;
 
-    private bool _isWork = false;
-    private int _maxVolume = 1;
-    private int _minVolume = 0;
-    private int _targetVolume = 0;
+    private Coroutine _volumeCoroutine;
+    private float _maxVolume = 1f;
+    private float _minVolume = 0f;
     private float _changeSpeed = 0.5f;
-   
-    void Start()
+
+    private void OnEnable()
+    {
+        _alarmTrigger.TriggerEnter += AlarmEnable;
+        _alarmTrigger.TriggerExit += AlarmDisable;
+    }
+
+    private void OnDisable()
+    {
+        _alarmTrigger.TriggerEnter -= AlarmEnable;
+        _alarmTrigger.TriggerExit -= AlarmDisable;
+    }
+
+    private void Start()
     {
         _audioSource = GetComponent<AudioSource>();
+        _audioSource.volume = _minVolume;
     }
 
-    private void Update()
+    private void AlarmEnable(Collider collider)
     {
-        _audioSource.volume = Mathf.MoveTowards(_audioSource.volume, _targetVolume, _changeSpeed * Time.deltaTime);
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (_isWork == false)
+        if (CheckEntryObject(collider))
         {
-            _isWork = true;
-            _targetVolume = _maxVolume;
-        }    
-    }
+            if (_volumeCoroutine != null)
+            {
+                StopCoroutine(_volumeCoroutine);
+            }
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (_isWork == true)
-        {
-            _isWork = false;
-            _targetVolume = _minVolume;
+            _volumeCoroutine = StartCoroutine(ChangeVolume(_maxVolume));
         }
+    }
+
+    private void AlarmDisable(Collider collider)
+    {
+        if (CheckEntryObject(collider))
+        {
+            if (_volumeCoroutine != null)
+            {
+                StopCoroutine(_volumeCoroutine);
+            }
+
+            _volumeCoroutine = StartCoroutine(ChangeVolume(_minVolume));
+        }
+    }
+
+    private bool CheckEntryObject(Collider collider)
+    {
+        return collider.gameObject.TryGetComponent(out RogueMover rogue);
+    }
+
+    private IEnumerator ChangeVolume(float targetVolume)
+    {
+        while (targetVolume - _audioSource.volume != 0)
+        {
+            _audioSource.volume = Mathf.MoveTowards(_audioSource.volume, targetVolume, _changeSpeed * Time.deltaTime);
+            yield return null;
+        }
+
+        _volumeCoroutine = null;
     }
 }
