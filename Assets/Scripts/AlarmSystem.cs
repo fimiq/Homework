@@ -5,24 +5,11 @@ using System.Collections;
 public class AlarmSystem : MonoBehaviour
 {
     [SerializeField] private AudioSource _audioSource;
-    [SerializeField] private AlarmTrigger _alarmTrigger;
 
     private Coroutine _volumeCoroutine;
     private float _maxVolume = 1f;
     private float _minVolume = 0f;
     private float _changeSpeed = 0.5f;
-
-    private void OnEnable()
-    {
-        _alarmTrigger.TriggerEnter += AlarmEnable;
-        _alarmTrigger.TriggerExit += AlarmDisable;
-    }
-
-    private void OnDisable()
-    {
-        _alarmTrigger.TriggerEnter -= AlarmEnable;
-        _alarmTrigger.TriggerExit -= AlarmDisable;
-    }
 
     private void Start()
     {
@@ -30,43 +17,38 @@ public class AlarmSystem : MonoBehaviour
         _audioSource.volume = _minVolume;
     }
 
-    private void AlarmEnable(Collider collider)
+    public void AlarmEnable() =>
+        SetTargetVolume(_maxVolume);
+    
+    public void AlarmDisable() =>
+        SetTargetVolume(_minVolume);       
+
+    private void SetTargetVolume(float volume)
     {
-        if (CheckEntryObject(collider))
+        if (_volumeCoroutine != null)
         {
-            if (_volumeCoroutine != null)
-            {
-                StopCoroutine(_volumeCoroutine);
-            }
-
-            _volumeCoroutine = StartCoroutine(ChangeVolume(_maxVolume));
+            StopCoroutine(_volumeCoroutine);
         }
-    }
 
-    private void AlarmDisable(Collider collider)
-    {
-        if (CheckEntryObject(collider))
-        {
-            if (_volumeCoroutine != null)
-            {
-                StopCoroutine(_volumeCoroutine);
-            }
-
-            _volumeCoroutine = StartCoroutine(ChangeVolume(_minVolume));
-        }
-    }
-
-    private bool CheckEntryObject(Collider collider)
-    {
-        return collider.gameObject.TryGetComponent(out RogueMover rogue);
+        _volumeCoroutine = StartCoroutine(ChangeVolume(volume));
     }
 
     private IEnumerator ChangeVolume(float targetVolume)
     {
-        while (targetVolume - _audioSource.volume != 0)
+        if (targetVolume > _minVolume && !_audioSource.isPlaying)
+        {
+            _audioSource.Play();
+        }
+
+        while (targetVolume != _audioSource.volume)
         {
             _audioSource.volume = Mathf.MoveTowards(_audioSource.volume, targetVolume, _changeSpeed * Time.deltaTime);
             yield return null;
+        }
+
+        if (targetVolume == _minVolume && _audioSource.isPlaying)
+        {
+            _audioSource.Stop();
         }
 
         _volumeCoroutine = null;

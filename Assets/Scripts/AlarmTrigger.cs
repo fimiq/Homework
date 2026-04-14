@@ -3,16 +3,27 @@ using UnityEngine;
 
 public class AlarmTrigger : MonoBehaviour
 {   
-    public event Action<Collider> TriggerEnter;
-    public event Action<Collider> TriggerExit;
+    public event Action TriggerEnter;
+    public event Action TriggerExit;
 
     private void OnTriggerEnter(Collider other)
     {
-        TriggerEnter?.Invoke(other);
+        if (CheckEntryObject(other))
+        {
+            TriggerEnter?.Invoke();
+        }        
     }
 
     private void OnTriggerExit(Collider other)
     {
-        TriggerExit?.Invoke(other);
+        if (CheckEntryObject(other))
+        {
+            TriggerExit?.Invoke();
+        }        
+    }
+
+    private bool CheckEntryObject(Collider collider)
+    {
+        return collider.gameObject.TryGetComponent(out RogueMover rogue);
     }
 }
