@@ -6682,10 +6682,15 @@ GameObject:
   - component: {fileID: 786444145}
   - component: {fileID: 786444149}
   - component: {fileID: 786444148}
+  - component: {fileID: 786444155}
+  - component: {fileID: 786444154}
   - component: {fileID: 786444150}
   - component: {fileID: 786444151}
+  - component: {fileID: 786444153}
+  - component: {fileID: 786444152}
+  - component: {fileID: 786444156}
   m_Layer: 0
-  m_Name: Martial Hero
+  m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6884,8 +6889,67 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f1f66dffe6c85a498719d254f244624, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerWallet
+--- !u!114 &786444152
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 786444144}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc622287c1e9e1c4faa0b3b2f1864d85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FlipHandler
+--- !u!114 &786444153
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 786444144}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4655ed4ffe7f7004a814c0f4c4203743, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WalletView
   _coinsText: {fileID: 796061685}
-  _spawner: {fileID: 664766227}
+--- !u!114 &786444154
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 786444144}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe6dd253b4765fd4f8c87aab9cf4fca0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerAnimator
+--- !u!114 &786444155
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 786444144}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56f42d4dfd81e724cbf35d3312d4c6d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Player
+--- !u!114 &786444156
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 786444144}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff559f0dc0e34f640bfcb4a892631234, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerCollector
 --- !u!1 &796061683
 GameObject:
   m_ObjectHideFlags: 0
@@ -9598,7 +9662,7 @@ Transform:
   m_GameObject: {fileID: 1536591736}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -3.65, z: 0}
+  m_LocalPosition: {x: 0, y: -2.28, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -9631,7 +9695,7 @@ Transform:
   m_GameObject: {fileID: 1539539108}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.65739, y: 1.33, z: -2.44579}
+  m_LocalPosition: {x: 1.65739, y: -0.3, z: -2.44579}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10697,7 +10761,10 @@ GameObject:
   - component: {fileID: 2010432336}
   - component: {fileID: 2010432335}
   - component: {fileID: 2010432338}
+  - component: {fileID: 2010432342}
+  - component: {fileID: 2010432341}
   - component: {fileID: 2010432339}
+  - component: {fileID: 2010432340}
   m_Layer: 0
   m_Name: Skillet
   m_TagString: Untagged
@@ -10778,7 +10845,7 @@ SpriteRenderer:
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 1ff3bb5d141c2204ea7a71ac5fed23ad, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 1
+  m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 1.28, y: 0.96}
@@ -10859,10 +10926,49 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d37354210f7367242a7e1f5ddcd529f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMover
-  _patrolPoints:
+  _speed: 2
+--- !u!114 &2010432340
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2010432334}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc622287c1e9e1c4faa0b3b2f1864d85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FlipHandler
+--- !u!114 &2010432341
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2010432334}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc6c6265d93809a4c9aaa73a85f57f22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyPatrol
+  _points:
   - {fileID: 1840725442}
   - {fileID: 1535851886}
-  _speed: 2
+--- !u!114 &2010432342
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2010432334}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e636ae1d2016664e85de6d10adcaa33, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Enemy
+  _mover: {fileID: 2010432339}
+  _patrol: {fileID: 2010432341}
+  _flipHandler: {fileID: 2010432340}
 --- !u!1 &2013410473
 GameObject:
   m_ObjectHideFlags: 1

@@ -3,15 +3,9 @@ using UnityEngine;
 
 public class Coin : MonoBehaviour
 {
-    public event Action<int> Collected;
+    public event Action<Coin> Collected;
 
-    [SerializeField] private int _value = 1;
-
-    public void Collect()
-    {
-        Collected?.Invoke(_value);
-        gameObject.SetActive(false);
-    }
+    public int Value { get; private set; } = 1;
 
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -20,4 +14,10 @@ public class Coin : MonoBehaviour
             Collect();
         }
     }
+
+    public void Collect()
+    {
+        Collected?.Invoke(this);
+        gameObject.SetActive(false);
+    }   
 }

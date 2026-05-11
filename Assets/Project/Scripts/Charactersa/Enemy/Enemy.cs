@@ -2,15 +2,20 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    [SerializeField] private EnemyMover _mover;
+    [SerializeField] private EnemyPatrol _patrol;
+    [SerializeField] private FlipHandler _flipHandler;
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
+        Vector3 target = _patrol.CurrentPoint;
+
+        _mover.MoveTo(target);
+
+        float direction = target.x - transform.position.x;
+
+        _flipHandler.Flip(direction);
+
+        _patrol.UpdateTarget(transform.position);
     }
 }

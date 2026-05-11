@@ -70,21 +70,19 @@ public class CoinSpawner : MonoBehaviour
         coin.Collected += OnCoinCollected;
 
         _activeCoins++;
-
-        CoinSpawned?.Invoke(coin);
     }
 
     private void OnReleaseCoin(Coin coin)
     {
         _activeCoins--;
-        Debug.Log(_activeCoins);
 
         coin.Collected -= OnCoinCollected;
         coin.gameObject.SetActive(false);
     }
 
-    private void OnCoinCollected(int value)
+    private void OnCoinCollected(Coin coin)
     {
+        ReleaseCoin(coin);
     }
 
     public void ReleaseCoin(Coin coin)

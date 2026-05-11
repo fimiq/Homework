@@ -6,13 +6,10 @@ public class WalletView : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _coinsText;
     private Wallet _wallet;
-    private void Start()
-    {
-        _wallet = GetComponent<Wallet>();
-    }
 
     private void OnEnable()
     {
+        _wallet = GetComponent<Wallet>();
         _wallet.OnChanged += UpdateUI; 
     }
 

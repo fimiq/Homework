@@ -7,7 +7,7 @@ public class PlayerAnimator : MonoBehaviour
 
     private readonly int IsRun = Animator.StringToHash("IsRun");
 
-    public void Init()
+    public void Awake()
     {
         _animator = GetComponent<Animator>();
     }

@@ -2,30 +2,33 @@ using UnityEngine;
 
 [RequireComponent(typeof(PlayerMover))]
 [RequireComponent(typeof(PlayerAnimator))]
+[RequireComponent(typeof(PlayerCollector))]
 [RequireComponent(typeof(Wallet))]
 public class Player : MonoBehaviour
 {
-    private PlayerMover _controller;
+    private PlayerMover _mover;
     private PlayerAnimator _animator;
+    private PlayerCollector _collector;
     private Wallet _wallet;
 
-    private void Start()
+    private void Awake()
     {
-        _controller = GetComponent<PlayerMover>();
+        _mover = GetComponent<PlayerMover>();
         _animator = GetComponent<PlayerAnimator>();
+        _collector = GetComponent<PlayerCollector>();
         _wallet = GetComponent<Wallet>();
     }
 
     private void OnEnable()
     {
-        _controller.OnMove += HandleMove;
-        _controller.OnCoinCollected += HandleCoinCollected;
+        _mover.OnMove += HandleMove;
+        _collector.CoinCollected += HandleCoinCollected;
     }
 
     private void OnDisable()
     {
-        _controller.OnMove -= HandleMove;
-        _controller.OnCoinCollected -= HandleCoinCollected;
+        _mover.OnMove -= HandleMove;
+        _collector.CoinCollected -= HandleCoinCollected;
     }
 
     private void HandleMove(float speed)

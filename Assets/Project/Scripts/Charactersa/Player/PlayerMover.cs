@@ -17,12 +17,12 @@ public class PlayerMover : MonoBehaviour
 
     private const string HorizontalAxis = "Horizontal";
 
-    private bool _isFaceRight = true;
-
+    private FlipHandler _flipHandler;
     private Rigidbody2D _rigidbody;
 
     private void Start()
     {
+        _flipHandler = GetComponent<FlipHandler>();
         _rigidbody = GetComponent<Rigidbody2D>();
     }
 
@@ -42,17 +42,9 @@ public class PlayerMover : MonoBehaviour
 
         _rigidbody.linearVelocity = new Vector2(horizontal * _speed, _rigidbody.linearVelocity.y);
 
-        if (horizontal > 0 && !_isFaceRight)
-            FlipCharacter();
-        else if (horizontal < 0 && _isFaceRight)
-            FlipCharacter();
-    }
-
-    private void FlipCharacter()
-    {
-        _isFaceRight = !_isFaceRight;
-
-        transform.rotation = Quaternion.Euler(0, 180, 0);
+        _flipHandler.Flip(horizontal);
+            
+        OnMove?.Invoke(Mathf.Abs(horizontal));
     }
 
     private void Jump()
