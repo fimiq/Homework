@@ -5,6 +5,7 @@ using UnityEngine;
 public class WalletView : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _coinsText;
+
     private Wallet _wallet;
 
     private void OnEnable()

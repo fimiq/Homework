@@ -6,9 +6,6 @@ using UnityEngine;
 [RequireComponent(typeof(FlipHandler))]
 public class PlayerMover : MonoBehaviour
 {
-    public event Action<float> OnMove;
-    public event Action<int> OnCoinCollected;
-
     [SerializeField] private float _speed = 5f;
     [SerializeField] private float _jumpForce = 7f;
     [SerializeField] private Transform _groundCheck;
@@ -19,6 +16,9 @@ public class PlayerMover : MonoBehaviour
 
     private FlipHandler _flipHandler;
     private Rigidbody2D _rigidbody;
+
+    public event Action<float> OnMove;
+    public event Action<int> OnCoinCollected;
 
     private void Start()
     {

@@ -33,6 +33,10 @@ public class CoinSpawner : MonoBehaviour
     {
         StartCoroutine(SpawnRoutine());
     }
+    public void ReleaseCoin(Coin coin)
+    {
+        _coinPool.Release(coin);
+    }
 
     private IEnumerator SpawnRoutine()
     {
@@ -83,11 +87,6 @@ public class CoinSpawner : MonoBehaviour
     private void OnCoinCollected(Coin coin)
     {
         ReleaseCoin(coin);
-    }
-
-    public void ReleaseCoin(Coin coin)
-    {
-        _coinPool.Release(coin);
     }
 
     private Transform GetRandomSpawnPoint()
