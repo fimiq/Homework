@@ -1,64 +1,59 @@
+using System.Collections;
 using UnityEngine;
 
 public class EnemyChaser : MonoBehaviour
 {
     [SerializeField] private float _viewDistance = 5f;
-    [SerializeField] private float _viewAngle = 90f;
+    [SerializeField] private float _scanInterval = 0.1f;
     [SerializeField] private LayerMask _obstacleLayer;
 
-    private Transform _target;
-    private bool _hasSeenTarget;
+    public bool HasTarget   { get; private set; }
+    public Vector3 TargetPosition => _targetTransform != null
+        ? _targetTransform.position
+        : transform.position;
 
-    public bool HasTarget => _hasSeenTarget;
-    public Vector3 TargetPosition => _target.position;
+    private Transform _targetTransform;
 
-    private void Awake()
+    private void OnEnable()  => StartCoroutine(ScanRoutine());
+    private void OnDisable() => StopAllCoroutines();
+
+    public void SetTarget(Transform target)
     {
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-
-        if (player != null)
-            _target = player.transform;
+        _targetTransform = target;
     }
 
-    private void Update()
+    private IEnumerator ScanRoutine()
     {
-        if (_target == null)
-            return;
+        var wait = new WaitForSeconds(_scanInterval);
 
-        if (CanSeeTarget())
+        while (enabled)
         {
-            _hasSeenTarget = true;
-        }
-        else if (Vector2.Distance(transform.position, _target.position) > _viewDistance)
-        {
-            _hasSeenTarget = false;
+            HasTarget = _targetTransform != null && CanSeeTarget();
+            yield return wait;
         }
     }
 
     private bool CanSeeTarget()
     {
-        float distance = Vector2.Distance(transform.position, _target.position);
+        Vector2 toTarget = (Vector2)(_targetTransform.position - transform.position);
+        float sqrDist = toTarget.sqrMagnitude;
 
-        if (distance > _viewDistance)
+        if (sqrDist > _viewDistance * _viewDistance)
             return false;
 
-        Vector2 facingDirection = transform.rotation.eulerAngles.y == 0f
-            ? Vector2.right
-            : Vector2.left;
-
-        Vector2 directionToTarget = (_target.position - transform.position).normalized;
-
-        float angle = Vector2.Angle(facingDirection, directionToTarget);
-
-        if (angle > _viewAngle / 2f)
-            return false;
-
+        float dist = Mathf.Sqrt(sqrDist);
         RaycastHit2D hit = Physics2D.Raycast(
             transform.position,
-            directionToTarget,
-            distance,
+            toTarget / dist,
+            dist,
             _obstacleLayer);
 
         return hit.collider == null;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, _viewDistance);
     }
 }

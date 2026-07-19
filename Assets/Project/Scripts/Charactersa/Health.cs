@@ -6,38 +6,38 @@ public class Health : MonoBehaviour
     [SerializeField] private int _maxHealth = 100;
 
     public event Action Died;
-    public event Action<int> Changed;
     public event Action Damaged;
+    public event Action<int> Changed;
 
-    public int CurrentHealth { get; private set; }
+    public int Current  { get; private set; }
+    public int Max      => _maxHealth;
 
     private void Awake()
     {
-        CurrentHealth = _maxHealth;
+        Current = _maxHealth;
     }
 
     public void TakeDamage(int damage)
     {
-        CurrentHealth -= damage;
+        if (damage <= 0)
+            return;
 
-        Debug.Log("Current Health" + CurrentHealth);
+        Current = Mathf.Clamp(Current - damage, 0, _maxHealth);
 
-        Changed?.Invoke(CurrentHealth);
         Damaged?.Invoke();
+        Changed?.Invoke(Current);
 
-        if (CurrentHealth <= 0)
-        {
-            CurrentHealth = 0;
+        if (Current == 0)
             Died?.Invoke();
-        }
-    }   
+    }
 
     public void Heal(int amount)
     {
-        CurrentHealth = Mathf.Min(CurrentHealth + amount, _maxHealth);
+        if (amount <= 0)
+            return;
 
-        Changed?.Invoke(CurrentHealth);
+        Current = Mathf.Clamp(Current + amount, 0, _maxHealth);
 
-        Debug.Log("Heal" + CurrentHealth);
+        Changed?.Invoke(Current);
     }
 }

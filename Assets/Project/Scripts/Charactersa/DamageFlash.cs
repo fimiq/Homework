@@ -11,6 +11,7 @@ public class DamageFlash : MonoBehaviour
 
     private Health _health;
     private Coroutine _flashCoroutine;
+    private Color[] _originalColors;
 
     private void Awake()
     {
@@ -18,17 +19,15 @@ public class DamageFlash : MonoBehaviour
 
         if (_renderers == null || _renderers.Length == 0)
             _renderers = GetComponentsInChildren<SpriteRenderer>();
+
+        _originalColors = new Color[_renderers.Length];
+
+        for (int i = 0; i < _renderers.Length; i++)
+            _originalColors[i] = _renderers[i].color;
     }
 
-    private void OnEnable()
-    {
-        _health.Damaged += OnDamaged;
-    }
-
-    private void OnDisable()
-    {
-        _health.Damaged -= OnDamaged;
-    }
+    private void OnEnable()  => _health.Damaged += OnDamaged;
+    private void OnDisable() => _health.Damaged -= OnDamaged;
 
     private void OnDamaged()
     {
@@ -40,17 +39,12 @@ public class DamageFlash : MonoBehaviour
 
     private IEnumerator FlashRoutine()
     {
-        Color[] originalColors = new Color[_renderers.Length];
-
-        for (int i = 0; i < _renderers.Length; i++)
-            originalColors[i] = _renderers[i].color;
-
         for (int flash = 0; flash < _flashCount; flash++)
         {
             SetColor(_flashColor);
             yield return new WaitForSeconds(_flashDuration);
 
-            RestoreColors(originalColors);
+            RestoreColors();
             yield return new WaitForSeconds(_flashDuration);
         }
 
@@ -59,13 +53,13 @@ public class DamageFlash : MonoBehaviour
 
     private void SetColor(Color color)
     {
-        foreach (SpriteRenderer renderer in _renderers)
-            renderer.color = color;
+        foreach (SpriteRenderer sr in _renderers)
+            sr.color = color;
     }
 
-    private void RestoreColors(Color[] colors)
+    private void RestoreColors()
     {
         for (int i = 0; i < _renderers.Length; i++)
-            _renderers[i].color = colors[i];
+            _renderers[i].color = _originalColors[i];
     }
 }

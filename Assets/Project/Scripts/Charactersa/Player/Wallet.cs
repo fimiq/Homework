@@ -1,15 +1,18 @@
-using UnityEngine;
 using System;
+using UnityEngine;
 
 public class Wallet : MonoBehaviour
 {
-    public int Coins { get; private set; }
+    public event Action<int> Changed;
 
-    public event Action<int> OnChanged;
+    public int Coins { get; private set; }
 
     public void Add(int amount)
     {
+        if (amount <= 0)
+            return;
+
         Coins += amount;
-        OnChanged?.Invoke(Coins);
+        Changed?.Invoke(Coins);
     }
 }

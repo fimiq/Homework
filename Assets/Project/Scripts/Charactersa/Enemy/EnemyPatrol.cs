@@ -1,10 +1,10 @@
 using UnityEngine;
 
+
 public class EnemyPatrol : MonoBehaviour
 {
     [SerializeField] private Transform[] _points;
-
-    private const float ReachDistance = 0.05f;
+    [SerializeField] private float _reachDistance = 0.2f;
 
     private int _currentIndex;
 
@@ -12,9 +12,9 @@ public class EnemyPatrol : MonoBehaviour
 
     public void UpdateTarget(Vector3 currentPosition)
     {
-        if (Mathf.Abs(currentPosition.x - CurrentPoint.x) < ReachDistance)
-        {
+        Vector2 diff = currentPosition - CurrentPoint;
+
+        if (diff.sqrMagnitude < _reachDistance * _reachDistance)
             _currentIndex = (_currentIndex + 1) % _points.Length;
-        }
     }
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(CapsuleCollider2D))]
 [RequireComponent(typeof(FlipHandler))]
+[RequireComponent(typeof(InputReader))]
 public class PlayerMover : MonoBehaviour
 {
     [SerializeField] private float _speed = 5f;
@@ -12,39 +13,42 @@ public class PlayerMover : MonoBehaviour
     [SerializeField] private float _groundRadius = 0.2f;
     [SerializeField] private LayerMask _groundLayer;
 
-    private const string HorizontalAxis = "Horizontal";
+    public event Action<float> Moved;
 
     private FlipHandler _flipHandler;
     private Rigidbody2D _rigidbody;
+    private InputReader _input;
 
-    public event Action<float> OnMove;
-    public event Action<int> OnCoinCollected;
-
-    private void Start()
+    private void Awake()
     {
         _flipHandler = GetComponent<FlipHandler>();
         _rigidbody = GetComponent<Rigidbody2D>();
+        _input = GetComponent<InputReader>();
+    }
+
+    private void OnEnable()
+    {
+        _input.JumpPressed += OnJumpPressed;
+    }
+
+    private void OnDisable()
+    {
+        _input.JumpPressed -= OnJumpPressed;
     }
 
     private void Update()
     {
-        Move();
-
-        if (Input.GetButtonDown("Jump") && OnGround())
-        {
-            Jump();
-        }   
-    }
-
-    private void Move()
-    {
-        float horizontal = Input.GetAxis(HorizontalAxis);
+        float horizontal = _input.Horizontal;
 
         _rigidbody.linearVelocity = new Vector2(horizontal * _speed, _rigidbody.linearVelocity.y);
-
         _flipHandler.Flip(horizontal);
-            
-        OnMove?.Invoke(Mathf.Abs(horizontal));
+        Moved?.Invoke(Mathf.Abs(horizontal));
+    }
+
+    private void OnJumpPressed()
+    {
+        if (IsGrounded())
+            Jump();
     }
 
     private void Jump()
@@ -53,7 +57,7 @@ public class PlayerMover : MonoBehaviour
         _rigidbody.AddForce(Vector2.up * _jumpForce, ForceMode2D.Impulse);
     }
 
-    private bool OnGround()
+    private bool IsGrounded()
     {
         return Physics2D.OverlapCircle(_groundCheck.position, _groundRadius, _groundLayer);
     }

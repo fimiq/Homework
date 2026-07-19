@@ -2,58 +2,50 @@ using UnityEngine;
 
 [RequireComponent(typeof(PlayerMover))]
 [RequireComponent(typeof(PlayerAnimator))]
-[RequireComponent(typeof(PlayerCollector))]
-[RequireComponent(typeof(Wallet))]
 [RequireComponent(typeof(Health))]
+[RequireComponent(typeof(InputReader))]
+[RequireComponent(typeof(Attack))]
 public class Player : MonoBehaviour
 {
     private PlayerMover _mover;
     private PlayerAnimator _animator;
-    private PlayerCollector _collector;
-    private Wallet _wallet;
     private Health _health;
+    private InputReader _input;
+    private Attack _attack;
 
     private void Awake()
     {
         _mover = GetComponent<PlayerMover>();
         _animator = GetComponent<PlayerAnimator>();
-        _collector = GetComponent<PlayerCollector>();
-        _wallet = GetComponent<Wallet>();
         _health = GetComponent<Health>();
+        _input = GetComponent<InputReader>();
+        _attack = GetComponent<Attack>();
     }
 
     private void OnEnable()
     {
-        _mover.OnMove += HandleMove;
-        _collector.CoinCollected += HandleCoinCollected;
-        _collector.MedKitCollected += HandleMedKitCollected;
-        _health.Died += HandleDied;
+        _mover.Moved += OnMoved;
+        _health.Died += OnDied;
+        _input.AttackPressed += OnAttackPressed;
     }
 
     private void OnDisable()
     {
-        _mover.OnMove -= HandleMove;
-        _collector.CoinCollected -= HandleCoinCollected;
-        _collector.MedKitCollected -= HandleMedKitCollected;
-        _health.Died -= HandleDied;
+        _mover.Moved -= OnMoved;
+        _health.Died -= OnDied;
+        _input.AttackPressed -= OnAttackPressed;
     }
 
-    private void HandleMove(float speed)
-    {
+    private void OnMoved(float speed) => 
         _animator.SetMove(speed);
-    }
 
-    private void HandleCoinCollected(int value)
+    private void OnAttackPressed()
     {
-        _wallet.Add(value);
+        if (_attack.TryAttack())
+            _animator.SetAttack();
     }
 
-    private void HandleMedKitCollected(int healAmount)
-    {
-        _health.Heal(healAmount);
-    }
-
-    private void HandleDied()
+    private void OnDied()
     {
         Debug.Log("Player died!");
         gameObject.SetActive(false);

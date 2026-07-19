@@ -10,7 +10,7 @@ public class MedKitSpawner : MonoBehaviour
     [SerializeField] private int _maxActiveMedKits = 2;
 
     private ObjectPool<MedKit> _pool;
-    private int _activeMedKits = 0;
+    private int _activeMedKits;
 
     private void Awake()
     {
@@ -25,16 +25,15 @@ public class MedKitSpawner : MonoBehaviour
         );
     }
 
-    private void Start()
-    {
-        StartCoroutine(SpawnRoutine());
-    }
+    private void Start() => StartCoroutine(SpawnRoutine());
+
+    public void Release(MedKit kit) => _pool.Release(kit);
 
     private IEnumerator SpawnRoutine()
     {
         var wait = new WaitForSeconds(_delay);
 
-        while (true)
+        while (enabled)
         {
             yield return wait;
 
@@ -55,19 +54,12 @@ public class MedKitSpawner : MonoBehaviour
         Transform spawnPoint = _spawnPositions[Random.Range(0, _spawnPositions.Length)];
         kit.transform.position = spawnPoint.position;
         kit.gameObject.SetActive(true);
-        kit.Collected += OnMedKitCollected;
         _activeMedKits++;
     }
 
     private void OnRelease(MedKit kit)
     {
         _activeMedKits--;
-        kit.Collected -= OnMedKitCollected;
         kit.gameObject.SetActive(false);
-    }
-
-    private void OnMedKitCollected(MedKit kit)
-    {
-        _pool.Release(kit);
     }
 }

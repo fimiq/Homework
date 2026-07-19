@@ -1,23 +1,36 @@
-using System;
 using UnityEngine;
 
+[RequireComponent(typeof(Health))]
+[RequireComponent(typeof(Wallet))]
 public class PlayerCollector : MonoBehaviour
 {
-    public event Action<int> CoinCollected;
-    public event Action<int> MedKitCollected;
+    [SerializeField] private CoinSpawner _coinSpawner;
+    [SerializeField] private MedKitSpawner _medKitSpawner;
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private Health _health;
+    private Wallet _wallet;
+
+    private void Awake()
     {
-        if (collision.TryGetComponent(out Coin coin))
+        _health = GetComponent<Health>();
+        _wallet = GetComponent<Wallet>();
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.TryGetComponent(out Coin coin))
         {
-            CoinCollected?.Invoke(coin.Value);
+            _wallet.Add(coin.Value);
             coin.Collect();
+            _coinSpawner.Release(coin);
+            return;
         }
 
-        if (collision.TryGetComponent(out MedKit medKit))
+        if (other.TryGetComponent(out MedKit medKit))
         {
-            MedKitCollected?.Invoke(medKit.HealAmount);
+            _health.Heal(medKit.HealAmount);
             medKit.Collect();
+            _medKitSpawner.Release(medKit);
         }
     }
 }
